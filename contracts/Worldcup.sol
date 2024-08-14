@@ -64,6 +64,7 @@ contract Worldcup{
             uint amt = (curBalance/countryToPlayers[currRound][_country].length)*currCounts;
             winnerVaults[currWinner] +=amt;
             distributeAmt +=amt;
+            //如果之前几期没领过，新的一期应该不可以领所有的，智能领取当期
             lockedAmts +=amt;
             console.log("winner:", currWinner, "currCounts:", currCounts);
             console.log("reward amt curr:", amt, "total:", winnerVaults[currWinner]);
@@ -87,7 +88,12 @@ contract Worldcup{
     function getVaultBalance()public view returns(uint256){
         return address(this).balance;
     }
-    // function claimReward(type name)external {
-        
-    // }
+    function claimReward()external {
+        uint256 rewards = winnerVaults[msg.sender];
+        require(rewards>0,"nothing to claim");
+        winnerVaults[msg.sender] = 0;
+        lockedAmts -= rewards;
+       (bool succeed,) = msg.sender.call{value: rewards}("");
+       emit ClaimReward(msg.sender, rewards);
+    }
 }

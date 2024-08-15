@@ -1,0 +1,8 @@
+{
+  "sepolia": {
+    "Worldcup": {
+      "address": "0x9D5dA4BdAc2c735160EC423281E8F377CB13203b",
+      "startBlock": 6504173
+    }
+  }
+}
